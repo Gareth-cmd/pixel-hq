@@ -84,6 +84,7 @@ body {
 
 .domain {
   position: absolute;
+  z-index: 2;
   right: clamp(1rem, 2.5vw, 2.5rem);
   bottom: clamp(1rem, 2vw, 2rem);
   padding: .7rem .9rem;
@@ -169,6 +170,7 @@ body {
 
   .brand-architecture {
     position: relative;
+    isolation: isolate;
     align-self: end;
     display: grid;
     gap: .8rem;
@@ -181,6 +183,22 @@ body {
     white-space: normal;
     text-align: center;
     animation: reveal 1.4s .35s both;
+  }
+
+  .brand-architecture::before {
+    position: absolute;
+    z-index: -1;
+    inset: -1.25rem -.75rem -1.6rem;
+    content: "";
+    background: radial-gradient(
+      ellipse at 50% 58%,
+      rgba(4, 5, 11, .94) 0%,
+      rgba(4, 5, 11, .84) 50%,
+      rgba(4, 5, 11, .42) 72%,
+      transparent 88%
+    );
+    backdrop-filter: blur(2px);
+    pointer-events: none;
   }
 
   .brand-architecture section { min-width: 0; }
