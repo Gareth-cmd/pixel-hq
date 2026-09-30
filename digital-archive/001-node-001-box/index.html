@@ -1,0 +1,228 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The NODE-001 Box | The Digital Archive</title>
+
+<style>
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  min-height: 100%;
+  background: #050509;
+  color: #f4f1f8;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+body {
+  background:
+    radial-gradient(circle at 60% 20%, rgba(74,40,110,.18), transparent 40%),
+    #050509;
+}
+
+.archive {
+  width: min(1500px, 94vw);
+  margin: auto;
+  padding: 42px 0 70px;
+}
+
+.back {
+  color: #75ddff;
+  text-decoration: none;
+  font-size: 12px;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+}
+
+.eyebrow {
+  margin-top: 50px;
+  color: #d56cff;
+  font-size: 11px;
+  letter-spacing: .28em;
+  text-transform: uppercase;
+}
+
+h1 {
+  margin: 10px 0 12px;
+  font-family: Georgia, "Times New Roman", serif;
+  font-weight: 400;
+  font-size: clamp(48px, 7vw, 96px);
+  line-height: .95;
+}
+
+.intro {
+  max-width: 760px;
+  color: #aaa6b3;
+  font-size: 17px;
+  line-height: 1.7;
+}
+
+.viewer {
+  position: relative;
+  width: 100%;
+  height: min(72vh, 850px);
+  min-height: 520px;
+  margin-top: 42px;
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,.14);
+  border-radius: 20px;
+  background: #000;
+  box-shadow: 0 30px 100px rgba(0,0,0,.6);
+}
+
+canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  outline: none;
+}
+
+.badge {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  padding: 10px 14px;
+  border: 1px solid rgba(255,255,255,.18);
+  border-radius: 999px;
+  background: rgba(5,5,9,.72);
+  backdrop-filter: blur(12px);
+  font-size: 11px;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+}
+
+.controls {
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+  right: 20px;
+  color: rgba(255,255,255,.72);
+  font-size: 12px;
+  letter-spacing: .08em;
+  pointer-events: none;
+}
+
+.record {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+  margin-top: 38px;
+  padding-top: 30px;
+  border-top: 1px solid rgba(255,255,255,.12);
+}
+
+.record p {
+  color: #9e99a8;
+  line-height: 1.7;
+}
+
+.label {
+  color: #d56cff;
+  font-size: 10px;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+}
+
+@media (max-width: 700px) {
+  .viewer {
+    min-height: 430px;
+    height: 65vh;
+  }
+
+  .record {
+    grid-template-columns: 1fr;
+  }
+}
+</style>
+
+<script type="importmap">
+{
+  "imports": {
+    "three": "./vendor/three/three.module.min.js",
+    "three/addons/controls/OrbitControls.js": "./vendor/three/OrbitControls.js",
+    "three/addons/postprocessing/Pass.js": "./vendor/three/Pass.js",
+    "@sparkjsdev/spark": "./vendor/spark/spark.module.min.js",
+    "splat-viewer/": "./viewer/"
+  }
+}
+</script>
+</head>
+
+<body>
+
+<main class="archive">
+
+<a class="back" href="../">← The Digital Archive</a>
+
+<div class="eyebrow">Archive 001 · 30 September 2026</div>
+
+<h1>The NODE-001 Box</h1>
+
+<p class="intro">
+The packaging used to bring NODE-001 home, preserved as an explorable
+Gaussian Splat during the first week of Base Camp.
+</p>
+
+<section class="viewer">
+  <canvas id="splatCanvas" tabindex="0"></canvas>
+
+  <div class="badge" id="status">
+    Loading artefact...
+  </div>
+
+  <div class="controls">
+    DRAG TO ORBIT · SCROLL TO ZOOM · WASD TO MOVE
+  </div>
+</section>
+
+<section class="record">
+  <div>
+    <div class="label">The Artefact</div>
+    <p>
+      Original Apple Mac mini packaging associated with NODE-001,
+      captured and reconstructed as a navigable three-dimensional record.
+    </p>
+  </div>
+
+  <div>
+    <div class="label">Digital Archaeology</div>
+    <p>
+      Gareth Bowyer<br>
+      Digital Archaeologist of Artificial Imagination<br>
+      Pixel Creative Studio
+    </p>
+  </div>
+</section>
+
+</main>
+
+<script type="module">
+import { createViewer, FILE_TYPES } from "./assets/viewer.js";
+
+const canvas = document.getElementById("splatCanvas");
+const status = document.getElementById("status");
+
+try {
+  const viewer = createViewer(canvas, { idleSpin: true });
+
+  await viewer.loadSplat(
+    "./scene/node-001-box.sog",
+    FILE_TYPES.sog
+  );
+
+  status.textContent = "ARTEFACT 001 · INTERACTIVE";
+
+  canvas.addEventListener("pointerdown", () => {
+    viewer.stopSpin();
+  }, { once: true });
+
+} catch (error) {
+  console.error(error);
+  status.textContent = "ARTEFACT FAILED TO LOAD";
+}
+</script>
+
+</body>
+</html>
